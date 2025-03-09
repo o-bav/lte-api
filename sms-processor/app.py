@@ -26,4 +26,5 @@ if __name__ == '__main__':
     channel.queue_declare(queue='sms_queue')
     channel.basic_consume(queue='sms_queue', on_message_callback=process_sms)
     channel.start_consuming()
-    
+
+
