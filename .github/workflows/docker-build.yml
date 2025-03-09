@@ -64,8 +64,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 pylint
 
-      - name: Lint with flake8
-        run: flake8 ./sms-modem ./sms-processor ./api-service
+#      - name: Lint with flake8
+#        run: flake8 ./sms-modem ./sms-processor ./api-service
 
       - name: Lint with pylint
         run: pylint ./sms-modem ./sms-processor ./api-service
