@@ -1,4 +1,4 @@
-Flask
+fastapi
+uvicorn
 pika
 pyyaml
-gunicorn

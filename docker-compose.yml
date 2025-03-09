@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -41,7 +39,7 @@ services:
     depends_on:
       - rabbitmq
     ports:
-      - "${API_PORT:-5001}:${API_PORT:-5000}"  # Изменено для избежания конфликта порта
+      - "${API_PORT:-5001}:${API_PORT:-5000}"  # Избегаем конфликта с AirPlay Receiver на Mac
     environment:
       RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
       RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}

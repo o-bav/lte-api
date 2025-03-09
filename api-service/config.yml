@@ -1,7 +1,9 @@
 rabbitmq:
   host: rabbitmq
   port: 5672
+
 modem:
   serial_port: /dev/ttyUSB0
+
 api:
-  port: 5000
+  port: 5000 # Внутри контейнера сервис по-прежнему слушает на порту 5000

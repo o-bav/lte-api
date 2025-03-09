@@ -1,19 +1,10 @@
-FROM python:3.8-slim-buster
-
-# Устанавливаем системные зависимости
-RUN apt-get update && apt-get install -y \
-    gammu \
-    libgammu-dev \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11-slim
 
 WORKDIR /app
-COPY requirements.txt .
 
-# Обновляем pip и устанавливаем зависимости, включая gunicorn
-RUN pip install --no-cache-dir --upgrade pip
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Запускаем приложение через gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4"]
