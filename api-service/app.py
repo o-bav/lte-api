@@ -1,6 +1,13 @@
 from flask import Flask, jsonify
 import pika
-import os
+import yaml
+
+with open('config.yml', 'r') as f:
+    config = yaml.safe_load(f)
+
+RABBITMQ_HOST = config['rabbitmq']['host']
+RABBITMQ_PORT = config['rabbitmq']['port']
+API_PORT = config['api']['port']
 
 app = Flask(__name__)
 
@@ -8,10 +15,7 @@ app = Flask(__name__)
 @app.route('/sms', methods=['GET'])
 def get_sms():
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host=os.environ.get('RABBITMQ_HOST', 'rabbitmq'),
-            port=int(os.environ.get('RABBITMQ_PORT', 5672))
-        )
+        pika.ConnectionParameters(host=RABBITMQ_HOST, port=RABBITMQ_PORT)
     )
     channel = connection.channel()
     channel.queue_declare(queue='sms_queue')
@@ -26,9 +30,4 @@ def get_sms():
 
 
 if __name__ == '__main__':
-    app.run(
-        debug=True,
-        host='0.0.0.0',
-        port=int(os.environ.get('API_PORT', 5000))
-    )
-# Пустая строка без пробелов
+    app.run(debug=True, host='0.0.0.0', port=API_PORT)

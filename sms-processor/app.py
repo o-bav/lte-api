@@ -1,7 +1,13 @@
 import pika
 import re
 import json
-import os
+import yaml
+
+with open('config.yml', 'r') as f:
+    config = yaml.safe_load(f)
+
+RABBITMQ_HOST = config['rabbitmq']['host']
+RABBITMQ_PORT = config['rabbitmq']['port']
 
 
 def process_sms(ch, method, properties, body):
@@ -17,13 +23,9 @@ def process_sms(ch, method, properties, body):
 
 if __name__ == '__main__':
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host=os.environ.get('RABBITMQ_HOST', 'rabbitmq'),
-            port=int(os.environ.get('RABBITMQ_PORT', 5672))
-        )
+        pika.ConnectionParameters(host=RABBITMQ_HOST, port=RABBITMQ_PORT)
     )
     channel = connection.channel()
     channel.queue_declare(queue='sms_queue')
     channel.basic_consume(queue='sms_queue', on_message_callback=process_sms)
     channel.start_consuming()
-    # Пустая строка без пробелов

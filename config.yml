@@ -1,0 +1,7 @@
+rabbitmq:
+  host: rabbitmq
+  port: 5672
+modem:
+  serial_port: /dev/ttyUSB0
+api:
+  port: 5000
