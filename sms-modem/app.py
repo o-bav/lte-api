@@ -37,3 +37,4 @@ if __name__ == '__main__':
         if "+CMGL:" in sms_data:
             send_message(sms_data)
         time.sleep(10)
+        

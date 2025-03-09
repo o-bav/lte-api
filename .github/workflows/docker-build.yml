@@ -49,6 +49,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: build # Добавляем зависимость от job build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
