@@ -1,1 +1,70 @@
+name: Docker Build and Push
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push sms-modem image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./sms-modem
+          file: ./sms-modem/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/sms-modem:${{ secrets.IMAGE_TAG }}
+
+      - name: Build and push sms-processor image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./sms-processor
+          file: ./sms-processor/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/sms-processor:${{ secrets.IMAGE_TAG }}
+
+      - name: Build and push api-service image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./api-service
+          file: ./api-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/api-service:${{ secrets.IMAGE_TAG }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pylint
+
+      - name: Lint with flake8
+        run: flake8 ./sms-modem ./sms-processor ./api-service
+
+      - name: Lint with pylint
+        run: pylint ./sms-modem ./sms-processor ./api-service
