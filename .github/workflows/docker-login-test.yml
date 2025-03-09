@@ -20,3 +20,4 @@ jobs:
           
       - name: Verify Login
         run: echo "Docker login successful!"
+# Пустая строка без пробелов
