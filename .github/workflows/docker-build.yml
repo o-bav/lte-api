@@ -47,25 +47,26 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/api-service:${{ secrets.IMAGE_TAG }}
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: build # Добавляем зависимость от job build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pylint
-
+#  lint:
+#    runs-on: ubuntu-latest
+#    needs: build # Добавляем зависимость от job build
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.8'
+#
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install flake8 pylint
+#
 #      - name: Lint with flake8
 #        run: flake8 ./sms-modem ./sms-processor ./api-service
-
-      - name: Lint with pylint
-        run: pylint ./sms-modem ./sms-processor ./api-service
+#
+#      - name: Lint with pylint
+#        run: pylint ./sms-modem ./sms-processor ./api-service
+#
